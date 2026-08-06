@@ -11,7 +11,7 @@ const Products = () => {
 
   const [searchParam, setSearchParam] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([])
-  const [totalPages, setTotalPages] = useState(1)
+  const [totalPages] = useState(1)
   const [loading, setLoading] = useState(true);
   const [mobileFilterOPen, setMobileFilterOpen] = useState(false)
 
