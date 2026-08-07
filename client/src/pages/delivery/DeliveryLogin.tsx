@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BikeIcon } from "lucide-react";
+import { ShoppingBasketIcon } from "lucide-react";
 import { heroSectionData } from "../../assets/assets";
 
 export default function DeliveryLogin() {
@@ -28,7 +28,7 @@ export default function DeliveryLogin() {
                 <div className="w-full max-w-md">
                     <div className="text-center mb-8">
                         <div className="flex-center gap-2 mb-4">
-                            <BikeIcon className="size-7 text-app-green" />
+                            <ShoppingBasketIcon className="size-7 text-app-green" />
                             <span className="text-2xl font-semibold text-app-green">Basket ~ Bounce</span>
                         </div>
                         <h1 className="text-2xl font-semibold text-app-green mb-2">Delivery Partner Login</h1>

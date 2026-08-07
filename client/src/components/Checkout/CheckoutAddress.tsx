@@ -45,6 +45,7 @@ const CheckoutAddress = ({ user, address, setAddress, setStep }: any) => {
             </button>
         </div>
     )
+    
 }
 
 export default CheckoutAddress

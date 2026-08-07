@@ -1,11 +1,13 @@
 import { ArrowUpRightIcon, ChevronDownIcon, LogOutIcon, MapPinIcon, MenuIcon, PackageIcon, SearchIcon, ShieldIcon, ShoppingBasketIcon, UserIcon, XIcon } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 
 const Navbar = () => {
-    const user: any = {name: "Be Gee", email: "be@example.com", isAdmin: true} /* {name: "Be Gee", email: "be@example.com", isAdmin: true} or if [any = null] then sign in option will be showed */
+    const { user, logout } = useAuth()
+    //const user: any = {name: "Be Gee", email: "be@example.com", isAdmin: true} /* {name: "Be Gee", email: "be@example.com", isAdmin: true} or if [any = null] then sign in option will be showed */
     const {cartCount, setIsCartOpen} = useCart()
     const [searchQuery, setsearchQuery] = useState("")
     const [userMenuOpen, setUserMenuOpen] = useState(false)
@@ -20,8 +22,9 @@ const Navbar = () => {
     }
     
     const handleLogout = () =>{
+        logout()
         setUserMenuOpen(false)
-        navigate("/")
+        navigate("/");
     }
 
   return (
@@ -42,8 +45,8 @@ const Navbar = () => {
                 {/* Search */}
                 <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-sm text-xs sm:text-sm">
                     <div className="relative w-full">
-                        <SearchIcon className="absolute left-2.5 top-1/2-translate-y-1/2 size-5 text-zinc-500" />
-                        <input type="text" placeholder="Search for Products..." value={searchQuery} onChange= {(e)=> setsearchQuery(e.target.value)} className="w-full pl-15 p-1.5 bg-orange-50 rounded-full ring ring-app-orange/15 focus:ring-app-orange/30" />
+                        <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-5 text-zinc-500" />
+                        <input type="text" placeholder="Search for Products..." value={searchQuery} onChange= {(e)=> setsearchQuery(e.target.value)} className="w-full pl-12 p-1.5 bg-orange-50 rounded-full ring ring-app-orange/15 focus:ring-app-orange/30" />
                     </div>
                 </form>
 
@@ -76,7 +79,7 @@ const Navbar = () => {
                         {userMenuOpen && (
                             <>
                                 <div className="fixed inset-0 z-40" onClick={()=> setUserMenuOpen(false)} />
-                                <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-x1 shadow-lg border border-app-border py-2 z-50 animate-fade-in">
+                                <div className="absolute right-0 mt-2.5 w-56 bg-white rounded-xl shadow-lg border border-app-border py-2 z-50 animate-fade-in">
                                     {user && (
                                         <div className="px-4 py-2 border-b border-app-border">
                                             <p className="text-sm font-medium text-zinc-900">{user?.name}</p>
