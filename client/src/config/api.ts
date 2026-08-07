@@ -1,10 +1,8 @@
 import axios from "axios"
 
-console.log("BASE URL:", import.meta.env.VITE_BASE_URL);
-
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-});
+  baseURL: import.meta.env.VITE_BASE_URL
+})
 
 // Inject JWT token from localStorage into every request
 api.interceptors.request.use((config)=>{
@@ -15,13 +13,14 @@ api.interceptors.request.use((config)=>{
     return config
 })
 
-// HAndle auth errors globally
-api.interceptors.response.use( (response)=> response,
+// Handle auth errors globally
+api.interceptors.response.use(
+    (response)=> response,
     (error)=> {
-        if(error.response?.status ===401){
+        if(error.response?.status === 401){
             localStorage.removeItem("auth_token");
             localStorage.removeItem("auth_user");
-            // Only redirect if not already pn auth pages
+            // Only redirect if not already on auth pages
             if(!window.location.pathname.includes("/login") && !window.location.pathname.includes("/register")){
                 window.location.href = "/login"
             }
@@ -30,4 +29,4 @@ api.interceptors.response.use( (response)=> response,
     }
 )
 
-export default api
+export default api;
