@@ -49,7 +49,7 @@ export function AuthProvider({children} : {children: ReactNode}){
         }
     }
 
-    const register = async (name: string, email: string, password: string)=> {
+    {/* const register = async (name: string, email: string, password: string)=> {
         try {
             const {data} =await api.post(`/auth/register`, {name, email, password})
             setUser(data.user)
@@ -61,7 +61,35 @@ export function AuthProvider({children} : {children: ReactNode}){
         } catch(error: any) {
             toast.error(error?.response?.data?.message || error?.message)
         }
+    }*/}
+    const register = async (name: string, email: string, password: string) => {
+    console.log("REGISTER CALLED");
+    console.log("API:", import.meta.env.VITE_BASE_URL);
+
+    try {
+        const { data } = await api.post("/auth/register", {
+            name,
+            email,
+            password,
+        });
+
+        console.log("SUCCESS", data);
+
+        setUser(data.user);
+        setToken(data.token);
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("auth_user", JSON.stringify(data.user));
+
+        toast.success("Registration successful");
+        navigate("/");
+    } catch (error: any) {
+        console.log("FULL ERROR:", error);
+        console.log("RESPONSE:", error.response);
+        console.log("MESSAGE:", error.message);
+
+        toast.error(error?.response?.data?.message || error?.message);
     }
+};
 
     const logout = () =>{
         setUser(null)

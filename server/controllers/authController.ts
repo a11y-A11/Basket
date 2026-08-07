@@ -48,6 +48,8 @@ export const Login = async (req: Request, res: Response)=> {
 // Register
 // POST /api/auth/register
 export const Register = async (req: Request, res: Response) => {
+  console.log("REGISTER API HIT");
+  console.log(req.body);
   try {
     const { name, email, password } = req.body;
 
