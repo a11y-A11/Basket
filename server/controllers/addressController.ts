@@ -76,7 +76,7 @@ export const updateAddress = async (req: Request, res: Response)=> {
     if(lng != null) data.lng = Number(lng);
 
     try {
-        await prisma,address.update({
+        await prisma.address.update({
             where: {id: req.params.id as string},
             data,
         })

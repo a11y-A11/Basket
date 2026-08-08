@@ -37,7 +37,7 @@ const CheckoutAddress = ({ user, address, setAddress, setStep }: any) => {
                     </div>
                 </div>
             )}
-            <Link to="/addresses" className="mt-6 px-6 py-3 border border-gray-600 text-gray-600 rounded-xl flex-center gap-2">
+            <Link to="/address" className="mt-6 px-6 py-3 border border-gray-600 text-gray-600 rounded-xl flex-center gap-2">
                 Add New Address <PlusIcon className="size-4" />
             </Link>
             <button onClick={() => { setStep("payment"); scrollTo(0, 0) }} disabled={!address.address || !address.city} className="mt-6 px-6 py-3 bg-app-green text-white font-semibold rounded-xl hover:bg-app-green-light transition-colors disabled:opacity-50 flex items-center gap-2">

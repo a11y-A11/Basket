@@ -94,7 +94,7 @@ export const AddressScalarFieldEnum = {
   label: 'label',
   address: 'address',
   city: 'city',
-  state: 'state',
+  district: 'district',
   zip: 'zip',
   isDefault: 'isDefault',
   lat: 'lat',
