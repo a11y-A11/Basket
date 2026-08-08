@@ -83,9 +83,6 @@ export const Register = async (req: Request, res: Response) => {
         email: email.toLowerCase(),
         password: hashedPassword,
       },
-      include: {
-        addresses: true,
-      },
     });
 
     // Generate JWT

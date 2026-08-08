@@ -14,7 +14,7 @@ import deliveryPartnerRouter from "./routes/deliveryPartnerRoutes.js";
 const app = express();
 
 // Middleware
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 const port = process.env.PORT || 3000;

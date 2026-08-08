@@ -88,7 +88,7 @@ const Login = () => {
                             </div>
                         </label>
                     <button type="submit" disabled={loading} className="block w-1/2 mx-auto py-3 bg-green-950 text-white font-semibold rounded-xl hover:bg-green-900  
-                    transition-colors disabled:opacity-50"> {loading ? <Loader2Icon className="mx-auto h-5 w-5 animate-spin"/> : isLoginState ? "Sign In" : "Sign Up"}</button>
+                    transition-colors disabled:opacity-50"> {loading ? (<Loader2Icon className="mx-auto h-5 w-5 animate-spin"/>) : isLoginState ? "Sign In" : "Sign Up"}</button>
                 </form>
             </div>
         </div>

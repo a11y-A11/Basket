@@ -42,7 +42,7 @@ export type AddressMinAggregateOutputType = {
   label: string | null
   address: string | null
   city: string | null
-  district: string | null
+  state: string | null
   zip: string | null
   isDefault: boolean | null
   lat: number | null
@@ -57,7 +57,7 @@ export type AddressMaxAggregateOutputType = {
   label: string | null
   address: string | null
   city: string | null
-  district: string | null
+  state: string | null
   zip: string | null
   isDefault: boolean | null
   lat: number | null
@@ -72,7 +72,7 @@ export type AddressCountAggregateOutputType = {
   label: number
   address: number
   city: number
-  district: number
+  state: number
   zip: number
   isDefault: number
   lat: number
@@ -99,7 +99,7 @@ export type AddressMinAggregateInputType = {
   label?: true
   address?: true
   city?: true
-  district?: true
+  state?: true
   zip?: true
   isDefault?: true
   lat?: true
@@ -114,7 +114,7 @@ export type AddressMaxAggregateInputType = {
   label?: true
   address?: true
   city?: true
-  district?: true
+  state?: true
   zip?: true
   isDefault?: true
   lat?: true
@@ -129,7 +129,7 @@ export type AddressCountAggregateInputType = {
   label?: true
   address?: true
   city?: true
-  district?: true
+  state?: true
   zip?: true
   isDefault?: true
   lat?: true
@@ -231,7 +231,7 @@ export type AddressGroupByOutputType = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault: boolean
   lat: number
@@ -269,7 +269,7 @@ export type AddressWhereInput = {
   label?: Prisma.StringFilter<"Address"> | string
   address?: Prisma.StringFilter<"Address"> | string
   city?: Prisma.StringFilter<"Address"> | string
-  district?: Prisma.StringFilter<"Address"> | string
+  state?: Prisma.StringFilter<"Address"> | string
   zip?: Prisma.StringFilter<"Address"> | string
   isDefault?: Prisma.BoolFilter<"Address"> | boolean
   lat?: Prisma.FloatFilter<"Address"> | number
@@ -285,7 +285,7 @@ export type AddressOrderByWithRelationInput = {
   label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
-  district?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   zip?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   lat?: Prisma.SortOrder
@@ -304,7 +304,7 @@ export type AddressWhereUniqueInput = Prisma.AtLeast<{
   label?: Prisma.StringFilter<"Address"> | string
   address?: Prisma.StringFilter<"Address"> | string
   city?: Prisma.StringFilter<"Address"> | string
-  district?: Prisma.StringFilter<"Address"> | string
+  state?: Prisma.StringFilter<"Address"> | string
   zip?: Prisma.StringFilter<"Address"> | string
   isDefault?: Prisma.BoolFilter<"Address"> | boolean
   lat?: Prisma.FloatFilter<"Address"> | number
@@ -320,7 +320,7 @@ export type AddressOrderByWithAggregationInput = {
   label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
-  district?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   zip?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   lat?: Prisma.SortOrder
@@ -343,7 +343,7 @@ export type AddressScalarWhereWithAggregatesInput = {
   label?: Prisma.StringWithAggregatesFilter<"Address"> | string
   address?: Prisma.StringWithAggregatesFilter<"Address"> | string
   city?: Prisma.StringWithAggregatesFilter<"Address"> | string
-  district?: Prisma.StringWithAggregatesFilter<"Address"> | string
+  state?: Prisma.StringWithAggregatesFilter<"Address"> | string
   zip?: Prisma.StringWithAggregatesFilter<"Address"> | string
   isDefault?: Prisma.BoolWithAggregatesFilter<"Address"> | boolean
   lat?: Prisma.FloatWithAggregatesFilter<"Address"> | number
@@ -357,7 +357,7 @@ export type AddressCreateInput = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault?: boolean
   lat: number
@@ -373,7 +373,7 @@ export type AddressUncheckedCreateInput = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault?: boolean
   lat: number
@@ -387,7 +387,7 @@ export type AddressUpdateInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -403,7 +403,7 @@ export type AddressUncheckedUpdateInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -418,7 +418,7 @@ export type AddressCreateManyInput = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault?: boolean
   lat: number
@@ -432,7 +432,7 @@ export type AddressUpdateManyMutationInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -447,7 +447,7 @@ export type AddressUncheckedUpdateManyInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -472,7 +472,7 @@ export type AddressCountOrderByAggregateInput = {
   label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
-  district?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   zip?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   lat?: Prisma.SortOrder
@@ -492,7 +492,7 @@ export type AddressMaxOrderByAggregateInput = {
   label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
-  district?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   zip?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   lat?: Prisma.SortOrder
@@ -507,7 +507,7 @@ export type AddressMinOrderByAggregateInput = {
   label?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
-  district?: Prisma.SortOrder
+  state?: Prisma.SortOrder
   zip?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   lat?: Prisma.SortOrder
@@ -580,7 +580,7 @@ export type AddressCreateWithoutUserInput = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault?: boolean
   lat: number
@@ -594,7 +594,7 @@ export type AddressUncheckedCreateWithoutUserInput = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault?: boolean
   lat: number
@@ -638,7 +638,7 @@ export type AddressScalarWhereInput = {
   label?: Prisma.StringFilter<"Address"> | string
   address?: Prisma.StringFilter<"Address"> | string
   city?: Prisma.StringFilter<"Address"> | string
-  district?: Prisma.StringFilter<"Address"> | string
+  state?: Prisma.StringFilter<"Address"> | string
   zip?: Prisma.StringFilter<"Address"> | string
   isDefault?: Prisma.BoolFilter<"Address"> | boolean
   lat?: Prisma.FloatFilter<"Address"> | number
@@ -652,7 +652,7 @@ export type AddressCreateManyUserInput = {
   label: string
   address: string
   city: string
-  district: string
+  state: string
   zip: string
   isDefault?: boolean
   lat: number
@@ -666,7 +666,7 @@ export type AddressUpdateWithoutUserInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -680,7 +680,7 @@ export type AddressUncheckedUpdateWithoutUserInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -694,7 +694,7 @@ export type AddressUncheckedUpdateManyWithoutUserInput = {
   label?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   city?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
   zip?: Prisma.StringFieldUpdateOperationsInput | string
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -711,7 +711,7 @@ export type AddressSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   label?: boolean
   address?: boolean
   city?: boolean
-  district?: boolean
+  state?: boolean
   zip?: boolean
   isDefault?: boolean
   lat?: boolean
@@ -727,7 +727,7 @@ export type AddressSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   label?: boolean
   address?: boolean
   city?: boolean
-  district?: boolean
+  state?: boolean
   zip?: boolean
   isDefault?: boolean
   lat?: boolean
@@ -743,7 +743,7 @@ export type AddressSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   label?: boolean
   address?: boolean
   city?: boolean
-  district?: boolean
+  state?: boolean
   zip?: boolean
   isDefault?: boolean
   lat?: boolean
@@ -759,7 +759,7 @@ export type AddressSelectScalar = {
   label?: boolean
   address?: boolean
   city?: boolean
-  district?: boolean
+  state?: boolean
   zip?: boolean
   isDefault?: boolean
   lat?: boolean
@@ -768,7 +768,7 @@ export type AddressSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AddressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "label" | "address" | "city" | "district" | "zip" | "isDefault" | "lat" | "lng" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
+export type AddressOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "label" | "address" | "city" | "state" | "zip" | "isDefault" | "lat" | "lng" | "createdAt" | "updatedAt", ExtArgs["result"]["address"]>
 export type AddressInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -790,7 +790,7 @@ export type $AddressPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     label: string
     address: string
     city: string
-    district: string
+    state: string
     zip: string
     isDefault: boolean
     lat: number
@@ -1226,7 +1226,7 @@ export interface AddressFieldRefs {
   readonly label: Prisma.FieldRef<"Address", 'String'>
   readonly address: Prisma.FieldRef<"Address", 'String'>
   readonly city: Prisma.FieldRef<"Address", 'String'>
-  readonly district: Prisma.FieldRef<"Address", 'String'>
+  readonly state: Prisma.FieldRef<"Address", 'String'>
   readonly zip: Prisma.FieldRef<"Address", 'String'>
   readonly isDefault: Prisma.FieldRef<"Address", 'Boolean'>
   readonly lat: Prisma.FieldRef<"Address", 'Float'>
