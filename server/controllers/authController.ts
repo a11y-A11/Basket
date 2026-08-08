@@ -23,7 +23,7 @@ export const Login = async (req: Request, res: Response)=> {
     if(!email || !password){
         return res.status(400).json({message: "Please provide email & password"})
     }
-    const user = await prisma.user.findUnique({where: {email: email.toLowerCase()}, include: {addresses: true}})
+    const user = await prisma.user.findUnique({where: {email: email.toLowerCase().trim()}, include: {addresses: true}})
     if(!user){
         return res.status(401).json({message: "Invalid email or password"})
     }
