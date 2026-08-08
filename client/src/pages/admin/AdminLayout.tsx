@@ -19,7 +19,7 @@ export default function AdminLayout() {
     if(!user?.isAdmin){
         return <Navigate to='/' replace/>
     }
-
+    
     return (
         <div className="h-screen overflow-hidden">
             <div className="max-lg:hidden">

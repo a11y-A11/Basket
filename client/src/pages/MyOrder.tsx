@@ -61,12 +61,12 @@ const MyOrder = () => {
         ) : (
           <div className="space-y-4">
             {orders.map((order)=>(
-              <Link key={order._id} to={`/order/${order._id}`} className="block max-w-4xl bg-white rounded-2xl p-5 hover:shadow transition-all">
+              <Link key={order.id} to={`/order/${order.id}`} className="block max-w-4xl bg-white rounded-2xl p-5 hover:shadow transition-all">
                 {/* order id, date & status */}
                 <div className="flex items-start justify-between mb-3">
                   {/* left */}
                   <div>
-                    <p className="text-sm font-medium text-app-green">Order #{order._id.slice(-8).toUpperCase()}</p>
+                    <p className="text-sm font-medium text-app-green">Order #{order.id.slice(-8).toUpperCase()}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <CalendarIcon className="size-3 text-app-text-light" />
                       <span className="text-xs text-app-text-light">{new Date(order.createdAt).toLocaleDateString("en-US", {month: "short", day:"numeric", year: "numeric"})}</span>

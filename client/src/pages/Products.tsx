@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom"
 import type { Product } from "../types";
-import { categoriesData, dummyProducts } from "../assets/assets";
+import { categoriesData } from "../assets/assets";
 import { ChevronDown, Home, SlidersHorizontal, XIcon,  } from "lucide-react";
 import ProductCard from "../components/Home/ProductCard";
 import Loading from "../components/Loading";
 import FilterPanel from "../components/FilterPanel";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const Products = () => {
 
   const [searchParam, setSearchParam] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([])
-  const [totalPages] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true);
   const [mobileFilterOPen, setMobileFilterOpen] = useState(false)
 
@@ -26,8 +28,24 @@ const Products = () => {
 
   const fetchProducts = async () =>{
     setLoading(true)
-    setProducts(dummyProducts.filter((p)=> p.category === category || category === ""));
-    setLoading(false)
+    try{
+      const params = new URLSearchParams()
+      if(category) params.set("category", category)
+      if(organic) params.set("organic", organic)
+      if(sort) params.set("sort", sort)
+      if(minPrice) params.set("minPrice", minPrice)
+      if(maxPrice) params.set("maxPrice", maxPrice)
+        params.set("page", String(page))
+        params.set("limit", "12")
+
+        const {data} = await api.get(`/products?${params.toString()}`);
+        setProducts(data.products)
+        setTotalPages(data.pages)
+    } catch(error: any){
+      toast.error(error?.response?.data?.message || error?.message);
+    } finally{
+      setLoading(false)
+    }
   }
 
   const updateFilter = (key: string, value: string)=>{
@@ -77,7 +95,7 @@ const Products = () => {
             {/* Header */}
             {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard key={product.id} product={product} />
             ))}
             </div> */}
             <div className="flex items-center justify-between mb-6">
@@ -118,7 +136,7 @@ const Products = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 xl:gap-8">
-                  {products.map((product)=> product.stock > 0 && (<ProductCard key={product._id} product={product}/> ))}
+                  {products.map((product)=> product.stock > 0 && (<ProductCard key={product.id} product={product}/> ))}
               </div>
             )}
 

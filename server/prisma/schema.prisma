@@ -14,8 +14,8 @@ model User {
   password  String
   phone     String?   @default("")
   avatar    String?   @default("")
-  createdAt DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   addresses Address[]
   orders    Order[]
 }
@@ -26,7 +26,7 @@ model Address {
   label     String
   address   String
   city      String
-  state     String
+  district  String
   zip       String
   isDefault Boolean  @default(false)
   lat       Float

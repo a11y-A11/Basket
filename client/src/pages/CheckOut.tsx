@@ -19,7 +19,7 @@ const CheckOut = () => {
 
   const [step, setStep] = useState("address")
   const [loading, setLoading] = useState(false)
-  const [address, setAddress] = useState<Address>({ _id: "", label: "Home", address: "", city: "", district: "", zip: "", isDefault: false, lat: 0, lng: 0, })
+  const [address, setAddress] = useState<Address>({ id: "", label: "Home", address: "", city: "", district: "", zip: "", isDefault: false, lat: 0, lng: 0, })
 
   const [paymentMethod, setPaymentMethod] = useState('card')
 
@@ -41,7 +41,7 @@ const CheckOut = () => {
     if(user?.addresses?.length){
       const defaultAddr = user.addresses.find((a)=>a.isDefault) || user.addresses[0] 
       setAddress({
-        _id: defaultAddr?._id, label: defaultAddr?.label, address: defaultAddr?.address, city: defaultAddr?.city, district: defaultAddr?.district, zip: defaultAddr?.zip, isDefault: defaultAddr?.isDefault, lat: defaultAddr?.lat, lng: defaultAddr?.lng,
+        id: defaultAddr?.id, label: defaultAddr?.label, address: defaultAddr?.address, city: defaultAddr?.city, district: defaultAddr?.district, zip: defaultAddr?.zip, isDefault: defaultAddr?.isDefault, lat: defaultAddr?.lat, lng: defaultAddr?.lng,
       });
     }
   }, [])
