@@ -69,7 +69,7 @@ const AddressPage = () => {
       }else{
          const {data}= await api.post(`/addresses`,payload);
         setAddresses(data.addresses)
-        updateUser({addresses: data.address})
+        updateUser({addresses: data.addresses})
         toast.success("Address added!")
       }
       resetForm()
