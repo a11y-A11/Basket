@@ -11,9 +11,9 @@ const CartSidebar = () => {
     const {items, updateQuantity, removeFromCart, cartTotal, isCartOpen, setIsCartOpen} = useCart()
 
     const navigate = useNavigate()
-    const [deliveryArea, setDeliveryArea] = useState("Dhaka");
+    const [deliveryArea, setDeliveryArea] = useState(localStorage.getItem("delivery_area") || "Dhaka");
 
-    const isDhaka = deliveryArea === "dhaka";
+    const isDhaka = deliveryArea === "Dhaka";
     const deliveryFee = cartTotal > 899 ? 0 : isDhaka ? 80 : 120;
     const grandTotal = cartTotal + deliveryFee;
 
@@ -86,7 +86,10 @@ const CartSidebar = () => {
 
                         <select
                             value={deliveryArea}
-                            onChange={(e) => setDeliveryArea(e.target.value)}
+                            onChange={(e) =>{
+                                const area = e.target.value;
+                                setDeliveryArea(area);
+                                localStorage.setItem("delivery_area", area);}}
                             className="w-full border border-app-border rounded-xl px-3 py-2"
                         >
                             <option value="Dhaka">Inside Dhaka (৳80)</option>

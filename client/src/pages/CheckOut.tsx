@@ -25,9 +25,18 @@ const CheckOut = () => {
 
   const [paymentMethod, setPaymentMethod] = useState('card')
 
-  const isDhaka = address.city.trim().toLowerCase() === "dhaka";
-  const deliveryFee = cartTotal > 899 ? 0 : isDhaka ? 80 : 120;
+  const [deliveryArea, setDeliveryArea] = useState(localStorage.getItem("delivery_area") || "Dhaka");
+  const deliveryFee = cartTotal > 899 ? 0 : deliveryArea === "Dhaka" ? 80 : 120;
   const total = cartTotal + deliveryFee;
+
+  const updateDeliveryAreaFromAddress = (selectedAddress: Address) => {
+    const city = selectedAddress.city?.trim().toLowerCase();
+
+    const newArea = city === "dhaka" ? "Dhaka" : "Outside";
+
+    setDeliveryArea(newArea);
+    localStorage.setItem("delivery_area", newArea);
+};
 
   const steps: {key: string; label: string; icon: typeof MapPinIcon}[] = [
     {key: "address", label: "Address", icon: MapPinIcon},
@@ -42,7 +51,7 @@ const CheckOut = () => {
           product: item.product.id,
           quantity: item.quantity,
         })),
-        shippingAddress: address, paymentMethod
+        shippingAddress: address, deliveryArea, paymentMethod
       }
       const { data } = await api.post('/orders', orderData)
       console.log(data)
@@ -68,6 +77,7 @@ const CheckOut = () => {
       setAddress({
         id: defaultAddr?.id, label: defaultAddr?.label, address: defaultAddr?.address, city: defaultAddr?.city, district: defaultAddr?.district, zip: defaultAddr?.zip, isDefault: defaultAddr?.isDefault, lat: defaultAddr?.lat, lng: defaultAddr?.lng,
       });
+      updateDeliveryAreaFromAddress(defaultAddr);
     }
   }, [user])
 
@@ -103,7 +113,7 @@ const CheckOut = () => {
           <div className="grid md:grid-cols-3 gap-6">
             {/* Main Form */}
             <div className="md:col-span-2">
-              {step === "address" && <CheckoutAddress address={address} setAddress={setAddress} setStep={setStep} user={user}/>}
+              {step === "address" && <CheckoutAddress address={address} setAddress={(selectedAddress: Address) => { setAddress(selectedAddress);  updateDeliveryAreaFromAddress(selectedAddress); }}  setStep={setStep} user={user}/>}
               {step === "payment" && <CheckoutPayment paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} setStep={setStep}/>}
               {step === "review" && <CheckoutReview address={address} items={items} handlePlaceOrder={handlePlaceOrder} loading={loading} total={total}/>}
             </div>
