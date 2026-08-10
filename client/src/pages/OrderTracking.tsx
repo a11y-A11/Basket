@@ -16,11 +16,37 @@ const OrderTracking = () => {
   const navigate = useNavigate()
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
-  const [liveLocation] = useState<{lat: number; lng: number} | null>(null)
+  const [liveLocation, setLiveLocation] = useState<{lat: number; lng: number} | null>(null)
 
   useEffect(()=>{
     api.get(`/order/${id}`).then((res)=> setOrder(res.data.order)).catch(()=>navigate("/order")).finally(()=> setLoading(false))
   },[id, navigate])
+
+  // Live location every 10 seconds
+  useEffect(()=>{
+    if(!order || ["Delivered", " Cancelled", "Placed"].includes(order.status)) return;
+
+    const fetchLocation = async () => {
+      try {
+        const { data } = await api.get(`/order/${id}/location`)
+        if(data.liveLocation?.lat && data.liveLocation?.lng && data.liveLocation.updatedAt){
+          setLiveLocation({
+            lat: data.liveLocation.lat,
+            lng: data.liveLocation.lng
+          })
+        }
+        // Also update order status if it changed
+        if(data.status && data.status !== order.status){
+          setOrder((prev)=> prev ? {...prev, status: data.status} : prev)
+        }
+      } catch{
+
+      }
+    } 
+    fetchLocation()
+    const interval = setInterval(fetchLocation, 10000)
+    return ()=> clearInterval(interval)
+  }, [id, order?.status])
 
   if(loading) return <Loading />
   if (!order) return null

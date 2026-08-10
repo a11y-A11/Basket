@@ -59,7 +59,7 @@ export const createOrder = async (req: Request, res: Response)=>{
     })
 
     const subtotal = orderItems.reduce((sum: number, item: any)=> sum + item.price * item.quantity, 0)
-    const isDhaka = shippingAddress.city.trim().toLowerCase() === "dhaka";
+    const isDhaka = shippingAddress.district.trim().toLowerCase() === "dhaka";
     const deliveryFee = subtotal > 899 ? 0 : isDhaka ? 80 : 120;
     const total = Math.round((subtotal + deliveryFee) * 100) / 100;
 
@@ -68,7 +68,7 @@ export const createOrder = async (req: Request, res: Response)=>{
             userId: req.user!.id,
             items: orderItems,
             shippingAddress, paymentMethod, subtotal, deliveryFee, total,
-            statusHistory: [{status: "Placed", note: "Order placed successfully", timestamp: new Date}]
+            statusHistory: [{status: "Placed", note: "Order placed successfully", timestamp: new Date()}]
         }
     })
 

@@ -3,7 +3,7 @@ import { TruckIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
 import Loading from "../../components/Loading";
-import { dummyDashboardOrdersData, dummyDeliveryPartnerData } from "../../assets/assets";
+import api from "../../config/api";
 
 export default function AdminOrders() {
 
@@ -12,17 +12,27 @@ export default function AdminOrders() {
     const [orders, setOrders] = useState<any[]>([]);
     const [partners, setPartners] = useState<DeliveryPartner[]>([]);
     const [loading, setLoading] = useState(true);
-    const [assignModal, setAssignModal] = useState<string | null>(null);
+    const [assignModel, setAssignModel] = useState<string | null>(null);
     const [selectedPartner, setSelectedPartner] = useState("");
 
     const fetchOrders = async () => {
-        setOrders(dummyDashboardOrdersData)
-        setTimeout(() => setLoading(false), 1000)
+        try {
+            const {data} = await api.get("/order/All")
+            setOrders(data.order)
+        }catch (error: any){
+            toast.error(error.response?.data?.message || "Failed to load orders")
+        }finally{
+            setLoading(false)
+        }
     };
 
     const fetchPartners = async () => {
-        setPartners(dummyDeliveryPartnerData as any)
-        setTimeout(() => setLoading(false), 1000)
+       try {
+        const {data} = await api.get("/admin/delivery-partners")
+        setPartners(data.partners.filter((p: DeliveryPartner)=> p.isActive))
+       } catch {
+
+       }
     };
 
     useEffect(() => {
@@ -31,14 +41,26 @@ export default function AdminOrders() {
     }, []);
 
     const handleStatusChange = async (id: string, newStatus: string) => {
-        console.log(id, newStatus);
+        try {
+            await api.put(`/order/${id}/status`, {status: newStatus})
+            toast.success("Order status updated.")
+            fetchOrders()
+        } catch (error: any){
+            toast.error(error.response?.data?.message || "Failed to update status...")
+        }
     };
 
     const handleAssign = async () => {
-        if (!assignModal || !selectedPartner) return;
-        toast.success("Delivery partner assigned!");
-        setAssignModal(null);
-        setSelectedPartner("");
+        if (!assignModel || !selectedPartner) return;
+        try {
+            await api.put(`/admin/order/${assignModel}/assign`, {partnerId: selectedPartner})
+            toast.success("Delivery partner assigned!");
+            setAssignModel(null);
+            setSelectedPartner("");
+            fetchOrders()
+        } catch(error: any) {
+            toast.error(error?.response?.data?.message || "Failed")
+        }
     };
 
     const statusOptions = ["Placed", "Confirmed", "Assigned", "Packed", "Out for Delivery", "Delivered", "Cancelled"];
@@ -100,7 +122,7 @@ export default function AdminOrders() {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <button onClick={() => { setAssignModal(order.id); setSelectedPartner(""); }} className="px-3 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors flex items-center gap-1">
+                                                <button onClick={() => { setAssignModel(order.id); setSelectedPartner(""); }} className="px-3 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors flex items-center gap-1">
                                                     <TruckIcon className="size-3" /> Assign
                                                 </button>
                                             )}
@@ -123,9 +145,9 @@ export default function AdminOrders() {
             </div>
 
             {/* Assign Modal */}
-            {assignModal && (
+            {assignModel && (
                 <>
-                    <div className="fixed inset-0 bg-app-cream/80 backdrop-blur z-50" onClick={() => setAssignModal(null)} />
+                    <div className="fixed inset-0 bg-app-cream/80 backdrop-blur z-50" onClick={() => setAssignModel(null)} />
                     <div className="fixed inset-0 z-50 flex-center p-4">
                         <div className="bg-white rounded-2xl p-6 w-full max-w-sm animate-fade-in">
                             <h3 className="text-lg font-semibold text-app-green mb-4">Assign Delivery Partner</h3>
@@ -148,7 +170,7 @@ export default function AdminOrders() {
                                 </div>
                             )}
                             <div className="flex gap-2">
-                                <button onClick={() => setAssignModal(null)} className="flex-1 py-2.5 text-sm font-medium text-zinc-600 bg-zinc-100 rounded-xl hover:bg-zinc-200 transition-colors">Cancel</button>
+                                <button onClick={() => setAssignModel(null)} className="flex-1 py-2.5 text-sm font-medium text-zinc-600 bg-zinc-100 rounded-xl hover:bg-zinc-200 transition-colors">Cancel</button>
                                 <button onClick={handleAssign} disabled={!selectedPartner} className="flex-1 py-2.5 text-sm font-medium text-white bg-app-green rounded-xl hover:bg-app-green-light transition-colors disabled:opacity-50">Assign</button>
                             </div>
                         </div>
