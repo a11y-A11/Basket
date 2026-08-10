@@ -66,7 +66,7 @@ const handleAddressChange = (selectedAddress: Address) => {
         })),
         shippingAddress: address, paymentMethod
       }
-      const { data } = await api.post('/orders', orderData)
+      const { data } = await api.post('/order', orderData)
       console.log(data)
 
       if(data.url){
