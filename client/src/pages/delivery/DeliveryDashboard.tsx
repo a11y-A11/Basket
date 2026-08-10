@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PackageIcon, NavigationIcon } from "lucide-react";
 import OtpModel from "../../components/Delivery/OtpModel";
 import CancelModel from "../../components/Delivery/CancelModel";
 import DeliveryOrderCard from "../../components/Delivery/DeliveryOrderCard";
 import Loading from "../../components/Loading";
 import type { Order } from "../../types";
-import { dummyDashboardOrdersData } from "../../assets/assets";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+const API_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000/api";
+
+const getAuthHeaders = () =>({
+    headers: {Authorization: `Bearer ${localStorage.getItem("delivery_token")}`}
+})
 
 export default function DeliveryDashboard() {
 
@@ -22,16 +29,46 @@ export default function DeliveryDashboard() {
     // Cancel modal
     const [cancelModel, setCancelModel] = useState<string | null>(null);
     const [cancelReason, setCancelReason] = useState("");
+    const watchIdRef = useRef<number | null>(null)
 
     const fetchOrders = async () => {
-        setLoading(true);
-        setOrders(dummyDashboardOrdersData as any);
-        setLoading(false);
+        setLoading(true)
+        try{
+            const {data} = await axios.get(`${API_URL}/delivery/my-delivery?status=${tab}`, getAuthHeaders())
+            setOrders(data.orders)
+        } catch (error: any){
+            toast.error(error?.response?.data?.message || "Failed to load deliveries");
+        } finally {
+            setLoading(false)
+        }
     };
 
     useEffect(() => {
         fetchOrders();
     }, [tab]);
+
+    // send location every 10s for active deliveries
+    useEffect(()=> {
+        const activeOrders = orders.filter((o)=> ["Assigned", "Packed", "Out for Delivery"].includes(o.status));
+        if(activeOrders.length === 0 || !tracking){
+            if(watchIdRef.current !== null){
+                navigator.geolocation.clearWatch(watchIdRef.current);
+                watchIdRef.current = null;
+            }
+            return;
+        }        
+
+        const sendLocation = (pos: GeolocationPosition)=>{
+            const {latitude: lat, longitude: lng} = pos.coords;
+            activeOrders.forEach((order)=>{
+                axios.put(`${API_URL}/delivery/my-deliveries/${order.id}/location`, {lat, lng}, getAuthHeaders()).catch(()=>{})
+            });
+        }
+        watchIdRef.current = navigator.geolocation.watchPosition(sendLocation, ()=>{},{
+                enableHighAccuracy: true,
+                maximumAge: 10000,
+        })
+    },[orders, tracking])
 
     const handleUpdateStatus = async (orderId: string, status: string) => {
         console.log(orderId, status);
@@ -46,6 +83,14 @@ export default function DeliveryDashboard() {
             setOtp("");
         }, 1000);
     };
+    return()=> {
+        if(watchIdRef.current !== null){
+            navigator.geolocation.clearWatch(watchIdRef.current)
+            watchIdRef.current = null;
+        }
+        clearInterval(interval)
+    }
+}, [order, tracking];
 
     const handleCancel = async () => {
         if (!cancelModel) return;
@@ -54,9 +99,12 @@ export default function DeliveryDashboard() {
             setSubmitting(false);
             setCancelModel(null);
             setCancelReason("");
-        }, 1000);
-    }
-
+        }, 1000;)}
+    // Also send an interval for more consistent updates
+    const interval = setInterval()=>{
+        navigator.geolocation.getCurrentPosition(sendLocation, ()=>{}, {enableHighAccuracy: true})
+    },10000)
+                
     return (
         <div className="space-y-6">
             {/* Tabs + Tracking toggle */}
