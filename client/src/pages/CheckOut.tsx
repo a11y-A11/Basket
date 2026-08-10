@@ -25,25 +25,30 @@ const CheckOut = () => {
 
   const [paymentMethod, setPaymentMethod] = useState('card')
 
-  const isDhaka = address.district?.trim().toLowerCase() === "dhaka"
-  const deliveryFee = cartTotal > 899 ? 0 : isDhaka ? 80 : 120;
+  const [deliveryArea, setDeliveryArea] = useState( localStorage.getItem("delivery_area") || "Dhaka");
+  const deliveryFee = cartTotal > 899 ? 0 : deliveryArea === "Dhaka" ? 80 : 120;
   const total = cartTotal + deliveryFee;
 
 const handleAddressChange = (selectedAddress: Address) => {
-    setAddress(selectedAddress);
+  setAddress(selectedAddress);
 
-    const isSelectedDhaka =
-        selectedAddress.district?.trim().toLowerCase() === "dhaka";
+  // Save selected address
+  localStorage.setItem("checkout_address_id", selectedAddress.id);
 
-    const newArea = isSelectedDhaka ? "Dhaka" : "Outside";
+  // Determine delivery area
+  const newArea =
+    selectedAddress.district?.trim().toLowerCase() === "dhaka"
+      ? "Dhaka"
+      : "Outside";
 
-    localStorage.setItem("delivery_area", newArea);
+  setDeliveryArea(newArea);
+  localStorage.setItem("delivery_area", newArea);
 
-    window.dispatchEvent(
-        new CustomEvent("delivery-area-changed", {
-            detail: newArea,
-        })
-    );
+  window.dispatchEvent(
+    new CustomEvent("delivery-area-changed", {
+      detail: newArea,
+    })
+  );
 };
 
   const steps: {key: string; label: string; icon: typeof MapPinIcon}[] = [
@@ -79,7 +84,7 @@ const handleAddressChange = (selectedAddress: Address) => {
     }
   }
   // Populate address from user's default address
-  useEffect(()=>{
+  {/*useEffect(()=>{
     if(user?.addresses?.length){
       const defaultAddr = user.addresses.find((a)=>a.isDefault) || user.addresses[0] 
       setAddress({
@@ -101,7 +106,50 @@ const handleAddressChange = (selectedAddress: Address) => {
             })
         );
     }
-  }, [user])
+  }, [user])*/}
+
+useEffect(() => {
+  if (!user?.addresses?.length) return;
+
+  const savedAddressId = localStorage.getItem("checkout_address_id");
+
+  const savedAddress = savedAddressId
+    ? user.addresses.find((a) => a.id === savedAddressId)
+    : null;
+
+  const selectedAddress =
+    savedAddress ||
+    user.addresses.find((a) => a.isDefault) ||
+    user.addresses[0];
+
+  if (!selectedAddress) return;
+
+  setAddress({
+    id: selectedAddress.id,
+    label: selectedAddress.label,
+    address: selectedAddress.address,
+    city: selectedAddress.city,
+    district: selectedAddress.district,
+    zip: selectedAddress.zip,
+    isDefault: selectedAddress.isDefault,
+    lat: selectedAddress.lat,
+    lng: selectedAddress.lng,
+  });
+
+  const newArea =
+    selectedAddress.district?.trim().toLowerCase() === "dhaka"
+      ? "Dhaka"
+      : "Outside";
+
+  setDeliveryArea(newArea);
+  localStorage.setItem("delivery_area", newArea);
+
+  window.dispatchEvent(
+    new CustomEvent("delivery-area-changed", {
+      detail: newArea,
+    })
+  );
+}, [user]);
 
   if(items.length === 0){
     return (
