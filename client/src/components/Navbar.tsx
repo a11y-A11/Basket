@@ -9,7 +9,7 @@ const Navbar = () => {
     const { user, logout } = useAuth()
     //const user: any = {name: "Be Gee", email: "be@example.com", isAdmin: true} /* {name: "Be Gee", email: "be@example.com", isAdmin: true} or if [any = null] then sign in option will be showed */
     const {cartCount, setIsCartOpen} = useCart()
-    const [searchQuery, setsearchQuery] = useState("")
+    const [searchQuery, setSearchQuery] = useState("")
     const [userMenuOpen, setUserMenuOpen] = useState(false)
     const navigate = useNavigate ()
 
@@ -17,7 +17,7 @@ const Navbar = () => {
         e.preventDefault()
         if(searchQuery.trim()){
             navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
-            setsearchQuery("")
+            setSearchQuery("")
         }
     }
     
@@ -46,7 +46,7 @@ const Navbar = () => {
                 <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-sm text-xs sm:text-sm">
                     <div className="relative w-full">
                         <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-5 text-zinc-500" />
-                        <input type="text" placeholder="Search for Products..." value={searchQuery} onChange= {(e)=> setsearchQuery(e.target.value)} className="w-full pl-12 p-1.5 bg-orange-50 rounded-full ring ring-app-orange/15 focus:ring-app-orange/30" />
+                        <input type="text" placeholder="Search for Products..." value={searchQuery} onChange= {(e)=> setSearchQuery(e.target.value)} className="w-full pl-12 p-1.5 bg-orange-50 rounded-full ring ring-app-orange/15 focus:ring-app-orange/30" />
                     </div>
                 </form>
 
