@@ -69,7 +69,7 @@ const CheckOut = () => {
         id: defaultAddr?.id, label: defaultAddr?.label, address: defaultAddr?.address, city: defaultAddr?.city, district: defaultAddr?.district, zip: defaultAddr?.zip, isDefault: defaultAddr?.isDefault, lat: defaultAddr?.lat, lng: defaultAddr?.lng,
       });
     }
-  }, [])
+  }, [user])
 
   if(items.length === 0){
     return (
