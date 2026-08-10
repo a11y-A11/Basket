@@ -13,7 +13,7 @@ const CartSidebar = () => {
     const navigate = useNavigate()
     const [deliveryArea, setDeliveryArea] = useState(localStorage.getItem("delivery_area") || "Dhaka");
 
-    const deliveryFee = cartTotal > 899 ? 0 : deliveryArea ? 80 : 120;
+    const deliveryFee = cartTotal > 899 ? 0 : deliveryArea === "Dhaka" ? 80 : 120;
     const grandTotal = cartTotal + deliveryFee;
 
 useEffect(() => {
