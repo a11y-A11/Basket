@@ -157,7 +157,7 @@ export const updateLocation = async (req: Request, res: Response)=> {
         where: {
             id: req.params.id as string,
             deliveryPartnerId: req.partner!.id,
-            status: {in: ['Assigned', "Packed", "Out for delivery"]}
+            status: {in: ['Assigned', "Packed", "Out for Delivery"]}
         }
     })
 
