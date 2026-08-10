@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import type { Order } from "../types";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { dummyDashboardOrdersData, statusColors } from "../assets/assets";
+import { statusColors } from "../assets/assets";
 import Loading from "../components/Loading";
 import { CalendarIcon, ChevronRightIcon, PackageIcon } from "lucide-react";
+import toast from "react-hot-toast";
+import api from "../config/api";
 
 
 const MyOrder = () => {
@@ -20,8 +22,16 @@ const MyOrder = () => {
 
   const {clearCart} = useCart()
   const fetchOrders = async () => {
-    setOrders(dummyDashboardOrdersData as any)
-    setLoading(false)
+    setLoading(true)
+    try {
+      const params = activeTab !== "All" ? `?status=$(activeTab)` : "";
+      const { data } = await api.get(`/order${params}`)
+      setOrders(data.orders)
+    } catch ( error: any ){
+      toast.error(error.response?.data?.message || error?.message);
+    }finally{
+      setLoading(false)
+    }
   }
 
   useEffect(()=>{

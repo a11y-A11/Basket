@@ -25,9 +25,26 @@ const CheckOut = () => {
 
   const [paymentMethod, setPaymentMethod] = useState('card')
 
-  const isDhaka = address.city.trim().toLowerCase() === "dhaka";
+  const isDhaka = address.district?.trim().toLowerCase() === "dhaka"
   const deliveryFee = cartTotal > 899 ? 0 : isDhaka ? 80 : 120;
   const total = cartTotal + deliveryFee;
+
+const handleAddressChange = (selectedAddress: Address) => {
+    setAddress(selectedAddress);
+
+    const isSelectedDhaka =
+        selectedAddress.district?.trim().toLowerCase() === "dhaka";
+
+    const newArea = isSelectedDhaka ? "Dhaka" : "Outside";
+
+    localStorage.setItem("delivery_area", newArea);
+
+    window.dispatchEvent(
+        new CustomEvent("delivery-area-changed", {
+            detail: newArea,
+        })
+    );
+};
 
   const steps: {key: string; label: string; icon: typeof MapPinIcon}[] = [
     {key: "address", label: "Address", icon: MapPinIcon},
@@ -68,6 +85,21 @@ const CheckOut = () => {
       setAddress({
         id: defaultAddr?.id, label: defaultAddr?.label, address: defaultAddr?.address, city: defaultAddr?.city, district: defaultAddr?.district, zip: defaultAddr?.zip, isDefault: defaultAddr?.isDefault, lat: defaultAddr?.lat, lng: defaultAddr?.lng,
       });
+    // Check district
+        const isDefaultDhaka =
+            defaultAddr.district?.trim().toLowerCase() === "dhaka";
+
+        const newArea = isDefaultDhaka ? "Dhaka" : "Outside";
+
+        // Save delivery area
+        localStorage.setItem("delivery_area", newArea);
+
+        // Tell CartSidebar about the change
+        window.dispatchEvent(
+            new CustomEvent("delivery-area-changed", {
+                detail: newArea,
+            })
+        );
     }
   }, [user])
 
@@ -103,7 +135,7 @@ const CheckOut = () => {
           <div className="grid md:grid-cols-3 gap-6">
             {/* Main Form */}
             <div className="md:col-span-2">
-              {step === "address" && <CheckoutAddress address={address} setAddress={setAddress} setStep={setStep} user={user}/>}
+              {step === "address" && <CheckoutAddress address={address} setAddress={handleAddressChange} setStep={setStep} user={user}/>}
               {step === "payment" && <CheckoutPayment paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} setStep={setStep}/>}
               {step === "review" && <CheckoutReview address={address} items={items} handlePlaceOrder={handlePlaceOrder} loading={loading} total={total}/>}
             </div>

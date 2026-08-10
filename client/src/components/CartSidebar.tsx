@@ -13,15 +13,18 @@ const CartSidebar = () => {
     const navigate = useNavigate()
     const [deliveryArea, setDeliveryArea] = useState(localStorage.getItem("delivery_area") || "Dhaka");
 
-    const isDhaka = deliveryArea === "Dhaka";
-    const deliveryFee = cartTotal > 899 ? 0 : isDhaka ? 80 : 120;
+    const deliveryFee = cartTotal > 899 ? 0 : deliveryArea ? 80 : 120;
     const grandTotal = cartTotal + deliveryFee;
 
 useEffect(() => {
     const handleDeliveryAreaChange = (event: Event) => {
         const customEvent = event as CustomEvent<string>;
 
-        setDeliveryArea(customEvent.detail);
+        const area = customEvent.detail;
+
+        if (area === "Dhaka" || area === "Outside") {
+            setDeliveryArea(area);
+        }
     };
 
     window.addEventListener(
@@ -108,6 +111,7 @@ useEffect(() => {
                             value={deliveryArea}
                             onChange={(e) =>{
                                 const area = e.target.value;
+                                 console.log("DELIVERY AREA CHANGED:", area);
                                 setDeliveryArea(area);
                                 localStorage.setItem("delivery_area", area);
                                 window.dispatchEvent(
