@@ -90,9 +90,9 @@ export default function DeliveryDashboard() {
             )}
 
             {/* OTP Modal */}
-            {OtpModel && <OtpModel setOtpModel={setOtpModel} otp={otp} setOtp={setOtp} handleComplete={handleComplete} submitting={submitting} />}
+            {otpModel && (<OtpModel setOtpModel={setOtpModel} otp={otp} setOtp={setOtp} handleComplete={handleComplete} submitting={submitting} />)}
             {/* Cancel Modal */}
-            {CancelModel && <CancelModel setCancelModel={setCancelModel} cancelReason={cancelReason} setCancelReason={setCancelReason} handleCancel={handleCancel} submitting={submitting} />}
+            {cancelModel && (<CancelModel setCancelModel={setCancelModel} cancelReason={cancelReason} setCancelReason={setCancelReason} handleCancel={handleCancel} submitting={submitting} />)}
         </div>
     );
 }
