@@ -67,7 +67,7 @@ const AddressPage = () => {
         updateUser({addresses: data.address})
         toast.success("Address updated!")
       }else{
-         const {data}= await api.put(`/addresses`,payload);
+         const {data}= await api.post(`/addresses`,payload);
         setAddresses(data.addresses)
         updateUser({addresses: data.address})
         toast.success("Address added!")
