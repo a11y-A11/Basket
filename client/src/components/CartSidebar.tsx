@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MinusIcon, PlusIcon, ReceiptIcon, ShoppingBagIcon, Trash2Icon, XIcon } from "lucide-react";
 
 
@@ -16,6 +16,26 @@ const CartSidebar = () => {
     const isDhaka = deliveryArea === "Dhaka";
     const deliveryFee = cartTotal > 899 ? 0 : isDhaka ? 80 : 120;
     const grandTotal = cartTotal + deliveryFee;
+
+useEffect(() => {
+    const handleDeliveryAreaChange = (event: Event) => {
+        const customEvent = event as CustomEvent<string>;
+
+        setDeliveryArea(customEvent.detail);
+    };
+
+    window.addEventListener(
+        "delivery-area-changed",
+        handleDeliveryAreaChange
+    );
+
+    return () => {
+        window.removeEventListener(
+            "delivery-area-changed",
+            handleDeliveryAreaChange
+        );
+    };
+}, []);
 
     if(!isCartOpen) return null
 
@@ -89,7 +109,11 @@ const CartSidebar = () => {
                             onChange={(e) =>{
                                 const area = e.target.value;
                                 setDeliveryArea(area);
-                                localStorage.setItem("delivery_area", area);}}
+                                localStorage.setItem("delivery_area", area);
+                                window.dispatchEvent(
+                                    new CustomEvent("delivery-area-changed", {
+                                        detail: area,}))
+                            }}
                             className="w-full border border-app-border rounded-xl px-3 py-2"
                         >
                             <option value="Dhaka">Inside Dhaka (৳80)</option>
