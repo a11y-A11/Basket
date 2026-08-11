@@ -109,47 +109,68 @@ const handleAddressChange = (selectedAddress: Address) => {
   }, [user])*/}
 
 useEffect(() => {
-  if (!user?.addresses?.length) return;
+    const loadCheckoutAddress = async () => {
+        try {
+            const { data } = await api.get("/addresses");
 
-  const savedAddressId = localStorage.getItem("checkout_address_id");
+            const addresses: Address[] = data.addresses || [];
 
-  const savedAddress = savedAddressId
-    ? user.addresses.find((a) => a.id === savedAddressId)
-    : null;
+            if (addresses.length === 0) {
+                return;
+            }
 
-  const selectedAddress =
-    savedAddress ||
-    user.addresses.find((a) => a.isDefault) ||
-    user.addresses[0];
+            // 1. Use previously selected checkout address
+            const savedAddressId = localStorage.getItem("checkout_address_id");
 
-  if (!selectedAddress) return;
+            const savedAddress = savedAddressId
+                ? addresses.find((a) => a.id === savedAddressId)
+                : null;
 
-  setAddress({
-    id: selectedAddress.id,
-    label: selectedAddress.label,
-    address: selectedAddress.address,
-    city: selectedAddress.city,
-    district: selectedAddress.district,
-    zip: selectedAddress.zip,
-    isDefault: selectedAddress.isDefault,
-    lat: selectedAddress.lat,
-    lng: selectedAddress.lng,
-  });
+            // 2. Otherwise use default address
+            // 3. Otherwise use first address
+            const selectedAddress =
+                savedAddress ||
+                addresses.find((a) => a.isDefault) ||
+                addresses[0];
 
-  const newArea =
-    selectedAddress.district?.trim().toLowerCase() === "dhaka"
-      ? "Dhaka"
-      : "Outside";
+            if (!selectedAddress) return;
 
-  setDeliveryArea(newArea);
-  localStorage.setItem("delivery_area", newArea);
+            setAddress(selectedAddress);
 
-  window.dispatchEvent(
-    new CustomEvent("delivery-area-changed", {
-      detail: newArea,
-    })
-  );
+            // Set delivery area
+            const newArea =
+                selectedAddress.district?.trim().toLowerCase() === "dhaka"
+                    ? "Dhaka"
+                    : "Outside";
+
+            setDeliveryArea(newArea);
+
+            localStorage.setItem(
+                "checkout_address_id",
+                selectedAddress.id
+            );
+
+            localStorage.setItem(
+                "delivery_area",
+                newArea
+            );
+
+            window.dispatchEvent(
+                new CustomEvent("delivery-area-changed", {
+                    detail: newArea,
+                })
+            );
+
+        } catch (error: any) {
+            console.error("Failed to load checkout address:", error);
+        }
+    };
+
+    if (user) {
+        loadCheckoutAddress();
+    }
 }, [user]);
+
 
   if(items.length === 0){
     return (
