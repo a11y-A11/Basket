@@ -68,42 +68,60 @@ export default function DeliveryDashboard() {
                 enableHighAccuracy: true,
                 maximumAge: 10000,
         })
-    },[orders, tracking])
+        // Also send an interval for more consistent updates
+        const interval = setInterval(()=>{
+            navigator.geolocation.getCurrentPosition(sendLocation, ()=>{}, {enableHighAccuracy: true})
+        },10000)
+        return()=> {
+        if(watchIdRef.current !== null){
+            navigator.geolocation.clearWatch(watchIdRef.current)
+            watchIdRef.current = null;
+        }
+            clearInterval(interval)
+    }
+},[orders, tracking])
 
     const handleUpdateStatus = async (orderId: string, status: string) => {
-        console.log(orderId, status);
+        try {
+            await axios.put(`${API_URL}/delivery/my-delivery/${orderId}/status`, {status}, getAuthHeaders());
+            toast.success(`Status updated to ${status}`)
+            fetchOrders();
+        } catch(error: any){
+            toast.error(error?.response?.data?.message || "Failed");
+        }
     };
 
     const handleComplete = async () => {
         if (!otpModel || !otp) return;
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
+        try {
+            await axios.put(`${API_URL}/delivery/my-delivery/${otpModel}/complete`, {otp}, getAuthHeaders());
+            toast.success(`Delivery completed!`);
             setOtpModel(null);
             setOtp("");
-        }, 1000);
-    };
-    return()=> {
-        if(watchIdRef.current !== null){
-            navigator.geolocation.clearWatch(watchIdRef.current)
-            watchIdRef.current = null;
+            fetchOrders();
+        } catch(error: any){
+            toast.error(error?.response?.data?.message || error?.message);
+        } finally {
+            setSubmitting(false)
         }
-        clearInterval(interval)
-    }
-}, [order, tracking];
+    };
 
     const handleCancel = async () => {
         if (!cancelModel) return;
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
+        try {
+            await axios.put(`${API_URL}/delivery/my-delivery/${cancelModel}/cancel`, {reason: cancelReason}, getAuthHeaders());
+            toast.success(`Delivery cancelled!`);
             setCancelModel(null);
             setCancelReason("");
-        }, 1000;)}
-    // Also send an interval for more consistent updates
-    const interval = setInterval()=>{
-        navigator.geolocation.getCurrentPosition(sendLocation, ()=>{}, {enableHighAccuracy: true})
-    },10000)
+            fetchOrders();
+        } catch(error: any){
+            toast.error(error?.response?.data?.message || "Failed");
+        } finally {
+            setSubmitting(false)
+        }
+    };
                 
     return (
         <div className="space-y-6">
