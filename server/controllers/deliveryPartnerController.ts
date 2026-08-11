@@ -40,7 +40,7 @@ export const loginPartner = async (req: Request, res: Response)=> {
 }
 
 // Get assigned deliveries
-// GET// API// delivery/ my-deliveries
+// GET// API// delivery/ my-delivery
 export const getMyDeliveries = async (req: Request, res: Response)=> {
     const { status } = req.query;
 

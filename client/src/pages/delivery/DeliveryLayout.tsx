@@ -8,8 +8,8 @@ export default function DeliveryLayout() {
     const [partner, setPartner] = useState<DeliveryPartner | null>(null);
 
     useEffect(() => {
-        const saved = localStorage.getItem("delivery_partners")
-        const token = localStorage.getItem("delivery_partner")
+        const saved = localStorage.getItem("delivery_partner")
+        const token = localStorage.getItem("delivery_token")
         if(!saved || !token){
             navigate('/delivery/login')
             return
@@ -21,7 +21,7 @@ export default function DeliveryLayout() {
         localStorage.removeItem("delivery_partner")
         localStorage.removeItem("delivery_token")
         setPartner(null)
-        navigate("delivery/login");
+        navigate("/delivery/login");
     };
 
     if (!partner) return null;
